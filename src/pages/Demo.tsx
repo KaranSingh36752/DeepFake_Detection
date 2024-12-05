@@ -16,6 +16,10 @@ export function Demo() {
   } | null>(null);
 
   const handleImageSelect = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload a valid image file.");
+      return;
+    }
     setSelectedFile(file);
     setSelectedImage(URL.createObjectURL(file)); // Show a preview of the selected image
     setResult(null); // Clear previous results
@@ -32,12 +36,15 @@ export function Demo() {
       toast.loading("Analyzing image...");
       const response = await analyzeImage(selectedFile); // Call the API
 
-      // Assuming the API response contains `deepfake` and `confidence` fields
-      const { deepfake, confidence } = response;
+      // Extract the confidence value from the API response
+      const confidence = response.type.deepfake;
+
+      // Update the result state
       setResult({
-        isReal: !deepfake, // If `deepfake` is true, it's not authentic
+        isReal: confidence < 0.5, // Real if confidence is less than 0.5
         confidence,
       });
+
       toast.dismiss(); // Dismiss loading toast
       toast.success("Analysis complete!");
     } catch (error) {
@@ -47,6 +54,12 @@ export function Demo() {
     } finally {
       setIsAnalyzing(false); // Reset loading state
     }
+  };
+
+  const handleReset = () => {
+    setSelectedImage(null);
+    setSelectedFile(null);
+    setResult(null);
   };
 
   return (
@@ -106,6 +119,12 @@ export function Demo() {
                   className={`px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:focus:ring-offset-gray-900`}
                 >
                   {isAnalyzing ? "Analyzing..." : "Analyze Image"}
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="ml-4 px-6 py-3 bg-gray-600 text-white rounded-lg font-semibold transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                >
+                  Reset
                 </button>
               </div>
             )}
