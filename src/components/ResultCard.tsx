@@ -18,10 +18,13 @@ export function ResultCard({ isReal, confidence, isLoading }: ResultCardProps) {
   }
 
   return (
-    <div className={`w-full max-w-xl mx-auto mt-8 p-6 rounded-lg shadow-md
-      ${isReal 
-        ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' 
-        : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'}`}>
+    <div
+      className={`w-full max-w-xl mx-auto mt-8 p-6 rounded-lg shadow-md ${
+        isReal
+          ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+          : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+      }`}
+    >
       <div className="flex items-center space-x-3">
         {isReal ? (
           <CheckCircle className="w-8 h-8 text-green-500 dark:text-green-400" />
@@ -29,11 +32,11 @@ export function ResultCard({ isReal, confidence, isLoading }: ResultCardProps) {
           <AlertTriangle className="w-8 h-8 text-red-500 dark:text-red-400" />
         )}
         <div>
-          <h3 className={`text-lg font-semibold ${
-            isReal 
-              ? 'text-green-700 dark:text-green-300' 
-              : 'text-red-700 dark:text-red-300'
-          }`}>
+          <h3
+            className={`text-lg font-semibold ${
+              isReal ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
+            }`}
+          >
             {isReal ? 'Image appears to be authentic' : 'Potential deepfake detected'}
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
